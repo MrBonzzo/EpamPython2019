@@ -34,25 +34,61 @@ P.S. За незакрытый файловый дескриптор - кара�
 """
 
 # read the file dna.fasta
+
+from collections import Counter, defaultdict
+
 dna = None
+
+with open("files/dna.fasta", "r") as dna_file:
+    dna = defaultdict(str)
+    gene = ""
+    for line in dna_file:
+        if line.startswith('>'):
+            gene = line[1:].rstrip()
+        else:
+            dna[gene] += line.rstrip()
+
+
 
 
 def translate_from_dna_to_rna(dna):
     
     """your code here"""
-    
+    rna = {}
+    for d in dna:
+        rna[d] = dna[d].replace("T", "U")
+        rna[d] = rna[d][:len(rna[d]) - (len(rna[d]) % 3)]
     return rna
 
 
 def count_nucleotides(dna):
     
     """your code here"""
-    
+    num_of_nucleotides = {}
+    for d in dna:
+        num_of_nucleotides[d] = Counter(dna[d])
     return num_of_nucleotides
+
+rna_codon_table = None
+with open("files/rna_codon_table.txt", "r") as table:
+    rna_codon_table = {}
+    for line in table:
+        line = line.rstrip().split()
+        for i, triplet_or_protein in enumerate(line):
+            if i % 2 == 0:
+                rna_codon_table[triplet_or_protein] = ""
+            else:
+                rna_codon_table[line[i - 1]] = triplet_or_protein
 
 
 def translate_rna_to_protein(rna):
     
     """your code here"""
-    
+    protein = {}
+    for r in rna:
+        protein[r] = ""
+        for i in range(len(rna[r]) // 3):
+            triplet = rna[r][i * 3: i * 3 + 3]
+            protein[r] += rna_codon_table[triplet] if rna_codon_table[triplet] != "Stop" else " "
+        protein[r] = protein[r].split()
     return protein
