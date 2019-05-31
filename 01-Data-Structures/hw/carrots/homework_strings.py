@@ -34,6 +34,7 @@ P.S. За незакрытый файловый дескриптор - кара�
 """
 
 from collections import Counter, defaultdict
+from matplotlib import pyplot as plt
 
 
 def get_dna(path_to_file):
@@ -117,6 +118,18 @@ def write_to_file(path_to_file, data):
             output_file.write("\n")
 
 
+def get_statistics_histogram(statistic):
+    for gene in statistic:
+        plt.xlabel('Nucleotides')
+        plt.ylabel('Count of nucleotides')
+        plt.grid(axis='y')
+        plt.title(f"{gene}")
+        plt.bar(statistic[gene].keys(), statistic[gene].values(), zorder=2)
+        file_name = gene.replace(" ", "_")
+        plt.savefig(f"{file_name}.png")
+        plt.close()
+
+
 if __name__ == "__main__":
     path_to_dna_file = "files/dna.fasta"
     path_to_table_file = "files/rna_codon_table.txt"
@@ -128,3 +141,4 @@ if __name__ == "__main__":
     write_to_file("statistic.txt", {s: str(dict(statistic[s])) for s in statistic})
     write_to_file("rna.txt", rna)
     write_to_file("protein.txt", protein)
+    get_statistics_histogram(statistic)
