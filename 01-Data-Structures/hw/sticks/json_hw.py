@@ -204,5 +204,5 @@ if __name__ == '__main__':
     variety_statistic = varieties_statistic(winedata_full)
     common_statistic = common_statistic(winedata_full)
     whole_stat = {"statistic": {"wine": variety_statistic, **common_statistic}}
-    dump_to_json(whole_stat, 'statistic.json')
-    dump_stat_to_markdown(whole_stat, 'statistic.md')
+    dump_to_json(whole_stat, 'stats.json')
+    dump_stat_to_markdown(whole_stat, 'stats.md')
