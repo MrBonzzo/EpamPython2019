@@ -163,8 +163,35 @@ def common_statistic(winedata):
 def dump_stat_to_markdown(stat, markdown_file_name):
     with open(markdown_file_name, 'w') as md_file:
         md_file.write('# Statistic\n\n')
-        md_file.write('# Certain wines\n\n')
-        wines = stat['statistic']['wine']
+        md_file.write('## Certain wines\n')
+        wine_stat = stat['statistic']['wine']
+        wine_params = list(wine_stat['Merlot'].keys())
+        table_head = f"| |{'|'.join(wine_params)}|"
+        table_head = table_head.replace('_', ' ').title()
+        delimiter = '-|'*(len(wine_params) + 1)
+        md_file.write(f'{table_head}\n')
+        md_file.write(f'{delimiter}\n')
+        for wine in wine_stat:
+            raw = f'|**{wine}**|'
+            for params in wine_params:
+                if wine_stat[wine][params] == 'null':
+                    parameter_value = ' '
+                else:
+                    parameter_value = wine_stat[wine][params]
+                raw += f'{parameter_value}|'
+            md_file.write(f'{raw}\n')
+        md_file.write('\n## Whole wines\n')
+        md_file.write('* Most expensive wine:\n')
+        for wine in stat['statistic']['most_expensive_wine']:
+            md_file.write(f'\t* _{wine}_\n')
+        md_file.write('* Cheapest wine:\n')
+        for wine in stat['statistic']['cheapest_wine']:
+            md_file.write(f'\t* _{wine}_\n')
+        for s in stat['statistic']:
+            if s not in ('wine', 'most_expensive_wine', 'cheapest_wine'):
+                line = f"* {s.replace('_', ' ').capitalize()}: "
+                line += f"_{stat['statistic'][s]}_\n"
+                md_file.write(line)            
 
 
 if __name__ == '__main__':
@@ -177,4 +204,4 @@ if __name__ == '__main__':
     common_statistic = common_statistic(winedata_full)
     whole_stat = {"statistic": {"wine": variety_statistic, **common_statistic}}
     dump_to_json(whole_stat, 'statistic.json')
-    # dump_stat_to_markdown(whole_stat, 'statistic.md')
+    dump_stat_to_markdown(whole_stat, 'statistic.md')
