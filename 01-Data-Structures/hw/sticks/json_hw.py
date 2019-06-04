@@ -3,6 +3,7 @@
 # Задание 1: простейший parser/dumper
 from collections import Counter, defaultdict
 
+
 def get_dicts_from_json(path_to_json_file):
     with open(path_to_json_file, 'r') as json_file:
         json_string = json_file.read()[3:-3]
@@ -66,7 +67,7 @@ def varieties_statistic(winedata):
         var_stat[var]['sum_score_cnt'] = 0
 
     for variety in varieties:
-        price =  []
+        price = []
         for wine in winedata:
             if wine['price'] != 'null' and wine['variety'] == variety:
                 price.append(int(wine['price']))
@@ -191,7 +192,7 @@ def dump_stat_to_markdown(stat, markdown_file_name):
             if s not in ('wine', 'most_expensive_wine', 'cheapest_wine'):
                 line = f"* {s.replace('_', ' ').capitalize()}: "
                 line += f"_{stat['statistic'][s]}_\n"
-                md_file.write(line)            
+                md_file.write(line)
 
 
 if __name__ == '__main__':
