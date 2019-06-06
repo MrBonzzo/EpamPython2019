@@ -11,17 +11,20 @@ def get_dicts_from_json(path_to_json_file):
         objects = [obj.split(', "') for obj in objects]
 
         def pairs(d):
-            return (d.split('": ')[0], d.split('": ')[1].strip('"'))
+            key = d.split('": ')[0]
+            value = d.split('": ')[1].strip('"').replace(", '", ",'")
+            return (key, value)
         objects = [dict(pairs(pair) for pair in obj) for obj in objects]
     return objects
 
 
 def dump_to_json(list_of_dicts, dump_file_name):
     with open(dump_file_name, 'w') as json_file:
-        replaces = [('\\\\', '\\'), ("{'", '{"'), ("'}", '"}')]
-        replaces += [("': '", '": "'), ("', '", '", "'), ('\', ', '", ')]
-        replaces += [(', \'', ', "'), ("': ", '": '), ("['", '["')]
-        replaces += [("']", '"]'), ('"null"', 'null')]
+        replaces = [("{'", '{"'), ("'}", '"}'), ("': '", '": "')]
+        replaces += [("', '", '", "'), ('\', "', '", "'), ('", \'', '", "')]
+        replaces += [(", '", ', "'), ("': ", '": '), ("['", '["')]
+        replaces += [("']", '"]'), ("\\'", "'"), (",'", ", '")]
+        replaces += [('\\\\', '\\'), ("'null'", "null")]
         str_to_write = str(list_of_dicts)
         for r in replaces:
             str_to_write = str_to_write.replace(*r)
@@ -162,7 +165,7 @@ def common_statistic(winedata):
 # Задание 4: markdown
 
 def dump_stat_to_markdown(stat, markdown_file_name):
-    with open(markdown_file_name, 'w') as md_file:
+    with open(markdown_file_name, 'w', encoding='utf-8') as md_file:
         md_file.write('# Statistic\n\n')
         md_file.write('## Certain wines\n')
         wine_stat = stat['statistic']['wine']
@@ -173,25 +176,28 @@ def dump_stat_to_markdown(stat, markdown_file_name):
         md_file.write(f'{table_head}\n')
         md_file.write(f'{delimiter}\n')
         for wine in wine_stat:
-            raw = f'|**{wine}**|'
+            row = f'|**{wine}**|'.encode().decode('unicode-escape')
             for params in wine_params:
                 if wine_stat[wine][params] == 'null':
                     parameter_value = ' '
                 else:
                     parameter_value = wine_stat[wine][params]
-                raw += f'{parameter_value}|'
-            md_file.write(f'{raw}\n')
+                row += f'{parameter_value}|'.encode().decode('unicode-escape')
+            md_file.write(f'{row}\n')
         md_file.write('\n## Whole wines\n')
         md_file.write('* Most expensive wine:\n')
         for wine in stat['statistic']['most_expensive_wine']:
-            md_file.write(f'\t* _{wine}_\n')
+            unicode_escape_wine = wine.encode().decode('unicode-escape')
+            md_file.write(f'\t* _{unicode_escape_wine}_\n')
         md_file.write('* Cheapest wine:\n')
         for wine in stat['statistic']['cheapest_wine']:
-            md_file.write(f'\t* _{wine}_\n')
+            unicode_escape_wine = wine.encode().decode('unicode-escape')
+            md_file.write(f'\t* _{unicode_escape_wine}_\n')
         for s in stat['statistic']:
             if s not in ('wine', 'most_expensive_wine', 'cheapest_wine'):
                 line = f"* {s.replace('_', ' ').capitalize()}: "
-                line += f"_{stat['statistic'][s]}_\n"
+                unicode_escape_stat = stat['statistic'][s]
+                line += f"_{unicode_escape_stat}_\n"
                 md_file.write(line)
 
 

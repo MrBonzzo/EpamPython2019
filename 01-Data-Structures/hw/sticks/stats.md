@@ -3,7 +3,7 @@
 ## Certain wines
 | |Average Price|Min Price|Max Price|Region|Country|Average Score|
 -|-|-|-|-|-|-|
-|**Gew\u00fcrztraminer**|26.17|6|197|Alsace|France|88.56|
+|**Gewürztraminer**|26.17|6|197|Alsace|France|88.56|
 |**Riesling**|32.6|5|775|Alsace|Germany|89.48|
 |**Merlot**|29.27|4|625|Columbia Valley (WA)|US|87.16|
 |**Madera**|0|0|0| | |0|
@@ -12,7 +12,7 @@
 
 ## Whole wines
 * Most expensive wine:
-	* _Ch\u00e2teau les Ormes Sorbet 2013  M\u00e9doc_
+	* _Château les Ormes Sorbet 2013  Médoc_
 * Cheapest wine:
 	* _Terrenal 2010 Cabernet Sauvignon (Yecla)_
 	* _Bandit NV Chardonnay (California)_
