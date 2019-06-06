@@ -16,4 +16,4 @@ if __name__ == '__main__':
     new_func = make_it_count(my_func, 'counter')
     for i in range(1, 5):
         new_func()
-        assert(i == counter)
+        assert i == counter
