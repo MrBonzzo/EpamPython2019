@@ -1,5 +1,5 @@
-import inspect
-import hw1
+from inspect import getsource
+from inspect import signature
 
 
 def modified_func(func, *fixated_args, **fixated_kwargs):
@@ -12,22 +12,22 @@ def modified_func(func, *fixated_args, **fixated_kwargs):
     inner.__name__ = f'func_{func.__name__}'
     inner.__doc__ = f'A func implementation of {func.__name__}\n'
     inner.__doc__ += f'with pre-applied arguments being:\n'
-    inner.__doc__ += f'\nfixated_args:\n'
-    for fa in fixated_args:
-        inner.__doc__ += f'{fa}\n'
-    inner.__doc__ += f'\nfixated_kwargs:\n'
-    for fkwa in fixated_kwargs:
-        inner.__doc__ += f'{fkwa}: {fixated_kwargs[fkwa]}\n'
+    sig = signature(func).bind(*fixated_args, **fixated_kwargs).arguments
+    for s in sig:
+        inner.__doc__ += f'{s} = {sig[s]}\n'
     inner.__doc__ += f'\nsource_code:\n'
-    inner.__doc__ += inspect.getsource(func)
+
+    # если вызывать inspect.getsource() для built-in функций, то TypeError
+    inner.__doc__ += getsource(func)
     return inner
 
 
+def arg_kwarg_func(a, b, c=81, *args, **kwargs):
+    print(a, b, c, args, kwargs)
+
+
 if __name__ == '__main__':
-    mod_letters_range = modified_func(hw1.letters_range, 'b', 's', d='1', f=0)
-    print(mod_letters_range.__name__)
-    print(mod_letters_range.__doc__)
-    without_args_kwargs = mod_letters_range()
-    print(without_args_kwargs)
-    with_args_kwargs = mod_letters_range(2, h='1', r='9')
-    print(with_args_kwargs)
+    md_func = modified_func(arg_kwarg_func, 5, 3, 4, 342, kw_0=0, kw_1=1)
+    print(f'{md_func.__name__}\n')
+    print(f'{md_func.__doc__}\n')
+    md_func()
