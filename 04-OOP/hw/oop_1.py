@@ -58,6 +58,7 @@ class Student:
         self.last_name = last_name
         self.first_name = first_name
 
+    @staticmethod
     def do_homework(homework: Homework):
         return homework if homework.is_active() else print('You are late')
 
