@@ -18,13 +18,23 @@ True
 """
 
 
+from collections import deque
+
+
 class PrintableFolder:
     def __init__(self, name, content):
         self.name = name
         self.content = content
 
     def __contains__(self, file):
-        return file in self.content
+        content_deque = deque(self.content)
+        while content_deque:
+            current_item = content_deque.popleft()
+            if file == current_item:
+                return True
+            elif isinstance(current_item, PrintableFolder):
+                content_deque.extend(current_item.content)
+        return False
 
     def __str__(self):
         ret_str = f'V {self.name}\n'
@@ -57,3 +67,5 @@ if __name__ == '__main__':
     folder1 = PrintableFolder('folder1', [folder2, file1])
     print(folder1)
     print(file2 in folder2)
+    print(file1 in folder3)
+    print(file3 in folder1)
