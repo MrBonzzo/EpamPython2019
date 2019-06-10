@@ -55,10 +55,10 @@ def slow_function(*args, **kwargs):
 
 
 if __name__ == '__main__':
-    print(f'problem 6: {problem_6}') # problem 6: 25164150
-    print(f'problem 9: {problem_9}') # problem 9: 31875000
-    print(f'problem 40: {problem_40}') # problem 40: 210
-    print(f'problem 48: {problem_48}') # problem 48: 9110846700
+    print(f'problem 6: {problem_6}')  # problem 6: 25164150
+    print(f'problem 9: {problem_9}')  # problem 9: 31875000
+    print(f'problem 40: {problem_40}')  # problem 40: 210
+    print(f'problem 48: {problem_48}')  # problem 48: 9110846700
 
     assert is_armstrong(153) is True, 'Число Армстронга'
     assert is_armstrong(10) is False, 'Не число Армстронга'
