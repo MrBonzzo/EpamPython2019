@@ -29,7 +29,7 @@ HomeworkResult принимает объект автора задания, пр
 4.
 Teacher
 Атрибут:
-    homework_done - структура с интерфейсом как в словаря, сюда поподают все
+    homework_done - структура с интерфейсом как y словаря, сюда поподают все
     HomeworkResult после успешного прохождения check_homework
     (нужно гаранитровать остутствие повторяющихся результатов по каждому
     заданию), группировать по экземплярам Homework.
@@ -51,6 +51,84 @@ PEP8 соблюдать строго, проверку делаю автотес
 """
 import datetime
 from collections import defaultdict
+
+
+class DeadlineError(Exception):
+    """Raise if deadline has passed"""
+
+
+class Homework:
+    def __init__(self, text, deadline):
+        self.text = text
+        self.deadline = datetime.timedelta(deadline)
+        self.created = datetime.datetime.now()
+
+    def is_active(self):
+        return (datetime.datetime.now() - self.created) < self.deadline
+
+    def __str__(self):
+        return f'{self.text}'
+
+
+class HomeworkResult:
+    def __init__(self, author, homework, solution):
+        if isinstance(homework, Homework):
+            self.homework = homework
+        else:
+            raise TypeError('You gave a not Homework object')
+        self.solution = solution
+        self.author = author
+        self.created = datetime.datetime.now()
+
+    def __repr__(self):
+        repr_ = f'Solution for {self.homework} by {self.author} is '
+        repr_ += f'"{self.solution}"'
+        return repr_
+
+
+class Human:
+    def __init__(self, last_name, first_name):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def __str__(self):
+        return f'{self.last_name} {self.first_name}'
+
+
+class Student(Human):
+
+    def do_homework(self, homework, solution):
+        if homework.is_active():
+            return HomeworkResult(self, homework, solution)
+        raise DeadlineError('You are late')
+
+    def __str__(self):
+        return f'Student {self.last_name} {self.first_name}'
+
+
+class Teacher(Human):
+
+    homework_done = defaultdict(set)
+
+    @staticmethod
+    def create_homework(text, deadline):
+        return Homework(text, deadline)
+
+    def check_homework(self, solution):
+        if len(solution.solution) > 5:
+            Teacher.homework_done[solution.homework].add(solution)
+            return True
+        return False
+
+    @staticmethod
+    def reset_results(homework=None):
+        if homework is None:
+            Teacher.homework_done = defaultdict(set)
+        elif homework in homework_done:
+            del Teacher.homework_done[homework]
+
+    def __str__(self):
+        return f'Teacher {self.last_name} {self.first_name}'
 
 
 if __name__ == '__main__':
