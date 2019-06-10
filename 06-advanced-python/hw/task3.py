@@ -6,11 +6,16 @@
 
 class ShiftDescriptor:
 
+    def __init__(self, shift):
+        self.shift = shift
+
     def __get__(self, instance, owner):
-        pass
+        return self.value
 
     def __set__(self, instance, value):
-        pass
+        temp_value = [chr((ord(c) - ord('a') + self.shift) % 26 + ord('a'))
+                      for c in list(value)]
+        self.value = ''.join(temp_value)
 
 
 class CeasarSipher:
