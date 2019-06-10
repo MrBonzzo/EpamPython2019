@@ -13,24 +13,28 @@ import functools
 
 def instances_counter(cls):
 
-    class DecoratorClass(cls):
+    cls.counter = 0
+    cls_new_ = cls.__new__
+
+    def __new__(cls, *args, **kwargs):
+        cls.counter += 1
+        return cls_new_(cls, *args, **kwargs)
+
+    @classmethod
+    def get_created_instances(cls):
+        return cls.counter
+
+    @classmethod
+    def reset_instances_counter(cls):
+        counter_before_reset = cls.counter
         cls.counter = 0
+        return counter_before_reset
 
-        def __init__(self):
-            cls.counter += 1
-            super().__init__()
+    cls.__new__ = __new__
+    cls.get_created_instances = get_created_instances
+    cls.reset_instances_counter = reset_instances_counter
 
-        @staticmethod
-        def get_created_instances():
-            return cls.counter
-
-        @staticmethod
-        def reset_instances_counter():
-            counter_before_reset = cls.counter
-            cls.counter = 0
-            return counter_before_reset
-
-    return DecoratorClass
+    return cls
 
 
 @instances_counter
@@ -40,8 +44,8 @@ class User:
 
 if __name__ == '__main__':
 
-    User.get_created_instances()  # 0
+    print(User.get_created_instances())  # 0
     user, _, _ = User(), User(), User()
-    user.get_created_instances()  # 3
-    user.reset_instances_counter()  # 3
-    user.get_created_instances()  # 0
+    print(user.get_created_instances())  # 3
+    print(user.reset_instances_counter())  # 3
+    print(user.get_created_instances())  # 0

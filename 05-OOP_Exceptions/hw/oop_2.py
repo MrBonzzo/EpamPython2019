@@ -81,9 +81,10 @@ class HomeworkResult:
         self.created = datetime.datetime.now()
 
     def __repr__(self):
-        repr_ = f'Solution for {self.homework} by {self.author} is '
-        repr_ += f'"{self.solution}"'
-        return repr_
+        return (
+            f'Solution for {self.homework} by {self.author} is '
+            f'"{self.solution}"'
+        )
 
 
 class Human:
@@ -114,18 +115,19 @@ class Teacher(Human):
     def create_homework(text, deadline):
         return Homework(text, deadline)
 
-    def check_homework(self, solution):
+    @classmethod
+    def check_homework(cls, solution):
         if len(solution.solution) > 5:
-            Teacher.homework_done[solution.homework].add(solution)
+            cls.homework_done[solution.homework].add(solution)
             return True
         return False
 
-    @staticmethod
-    def reset_results(homework=None):
+    @classmethod
+    def reset_results(cls, homework=None):
         if homework is None:
-            Teacher.homework_done = defaultdict(set)
+            cls.homework_done.clear()
         elif homework in homework_done:
-            del Teacher.homework_done[homework]
+            del cls.homework_done[homework]
 
     def __str__(self):
         return f'Teacher {self.last_name} {self.first_name}'
