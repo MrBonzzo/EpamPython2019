@@ -126,7 +126,7 @@ class Teacher(Human):
     def reset_results(cls, homework=None):
         if homework:
             del cls.homework_done[homework]
-        elif homework in cls.homework_done:
+        else:
             cls.homework_done.clear()
 
     def __str__(self):
