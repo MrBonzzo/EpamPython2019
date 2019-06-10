@@ -1,5 +1,6 @@
 """
-Реализовать метод __str__, позволяющий выводить все папки и файлы из данной, например так:
+Реализовать метод __str__, позволяющий выводить все папки и файлы из данной,
+например так:
 
 > print(folder1)
 
@@ -22,8 +23,21 @@ class PrintableFolder:
         self.name = name
         self.content = content
 
+    def __contains__(self, file):
+        return file in self.content
+
     def __str__(self):
-        pass
+        ret_str = f'V {self.name}\n'
+        for c in self.content:
+            if isinstance(c, PrintableFolder):
+                temp_str = f'|-> {c}'
+                temp_str = ['|   ' + f for f in temp_str.split('\n')]
+                temp_str = '\n'.join(temp_str)[4:]
+                ret_str += f'{temp_str}\n'
+            else:
+                ret_str += f'|-> {c}\n'
+        ret_str = ret_str[:-1]
+        return ret_str
 
 
 class PrintableFile:
@@ -31,7 +45,15 @@ class PrintableFile:
         self.name = name
 
     def __str__(self):
-        pass
+        return f'{self.name}'
 
 
-
+if __name__ == '__main__':
+    file1 = PrintableFile('file1')
+    file2 = PrintableFile('file2')
+    file3 = PrintableFile('file3')
+    folder3 = PrintableFolder('folder3', [file3])
+    folder2 = PrintableFolder('folder2', [folder3, file2])
+    folder1 = PrintableFolder('folder1', [folder2, file1])
+    print(folder1)
+    print(file2 in folder2)
