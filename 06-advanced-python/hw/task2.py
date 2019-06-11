@@ -16,7 +16,6 @@ class Graph:
 
     def __iter__(self):
         self.vertice_queue = deque(sorted(list(self.E))[0])
-        self.vertice_queue = deque('C')
         self.passed_vertice = set()
         return self
 
@@ -33,9 +32,10 @@ class Graph:
         self.vertice_queue.append(unpassed_vertice[0])
         return self.__next__()
 
+if __name__ == '__main__':
+    E = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': ['A']}
+    graph = Graph(E)
 
-E = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': ['A']}
-graph = Graph(E)
-
-for vertice in graph:
-    print(vertice)
+    for vertice in graph:
+        print(vertice)
+    print(list(graph))

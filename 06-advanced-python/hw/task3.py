@@ -23,10 +23,10 @@ class CeasarSipher:
     message = ShiftDescriptor(4)
     another_message = ShiftDescriptor(7)
 
+if __name__ == '__main__':
+    a = CeasarSipher()
+    a.message = 'abc'
+    a.another_message = 'hello'
 
-a = CeasarSipher()
-a.message = 'abc'
-a.another_message = 'hello'
-
-assert a.message == 'efg'
-assert a.another_message == 'olssv'
+    assert a.message == 'efg'
+    assert a.another_message == 'olssv'
