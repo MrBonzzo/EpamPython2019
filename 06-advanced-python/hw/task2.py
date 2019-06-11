@@ -15,19 +15,26 @@ class Graph:
         self.E = E
 
     def __iter__(self):
-        self.vertice_queue = deque(list(self.E)[0])
-        print(self.vertice_queue)
+        self.vertice_queue = deque(sorted(list(self.E))[0])
+        self.vertice_queue = deque('C')
+        self.passed_vertice = set()
         return self
 
     def __next__(self):
         while self.vertice_queue:
             current_vertice = self.vertice_queue.popleft()
-            self.vertice_queue.extend(self.E[current_vertice])
-            return current_vertice
-        raise StopIteration
+            if current_vertice not in self.passed_vertice:
+                self.vertice_queue.extend(self.E[current_vertice])
+                self.passed_vertice.add(current_vertice)
+                return current_vertice
+        if set(self.E) == self.passed_vertice:
+            raise StopIteration
+        unpassed_vertice = sorted(list(set(self.E) - self.passed_vertice))
+        self.vertice_queue.append(unpassed_vertice[0])
+        return self.__next__()
 
 
-E = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': []}
+E = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': ['A']}
 graph = Graph(E)
 
 for vertice in graph:
