@@ -5,12 +5,12 @@ import select
 import socket
 
 
-def send_to_all(client_socket, message):
+def send_to_all(message, client_socket=None):
     for dest_socket in clients:
         if dest_socket != main_socket and dest_socket != client_socket:
             try:
                 dest_socket.send(message)
-            except BrokenPipeError:
+            except (ConnectionResetError, ConnectionAbortedError):
                 continue
 
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                     else:
                         client_addr = f'{clients[sock]}: '.encode('utf-8')
                         data = client_addr + data
-                        send_to_all(sock, data)
+                        send_to_all(data, sock)
     except KeyboardInterrupt:
         pass
     finally:
