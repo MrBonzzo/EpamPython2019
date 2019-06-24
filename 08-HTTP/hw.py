@@ -9,7 +9,7 @@ import json
 def get_cookies_from_file(filename):
     with open(filename, 'r') as cookie_file:
         lines = [c.strip() for c in cookie_file.read().split('\n')]
-        cookies = {lines[0]: lines[1], lines[2]: lines[3]}
+        cookies = {lines[0]: lines[1], lines[2]: lines[3], lines[4]: lines[5]}
     return cookies
 
 
@@ -37,7 +37,7 @@ class PikabuGrabber():
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Language": "en-US,en;q=0.5",
         "Accept-Encoding": "gzip, deflate, br",
-        "X-Csrf-Token": "ouoo8b36mu9vlvt51ou0fooo9aea3go5",
+        "X-Csrf-Token": cookies['X-Csrf-Token'],
         "X-Requested-With": "XMLHttpRequest",
         "Connection": "keep-alive",
         "Referer": "https://pikabu.ru/",
