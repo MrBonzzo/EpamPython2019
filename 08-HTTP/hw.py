@@ -12,7 +12,6 @@ def get_cookies_from_file(filename):
         cookies = {lines[0]: lines[1], lines[2]: lines[3]}
     return cookies
 
-print(get_cookies_from_file('Cookies'))
 
 class PikabuGrabber():
     cookies = get_cookies_from_file('Cookies')
