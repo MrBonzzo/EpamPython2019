@@ -11,7 +11,7 @@ if __name__ == "__main__":
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         server_socket.connect((host, port))
-    except ConnectionRefusedError:
+    except ConnectionError:
         print('\nUnable to connect')
         sys.exit()
     print('\nConnected to TCP chat server')

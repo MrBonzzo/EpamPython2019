@@ -10,7 +10,7 @@ def send_to_all(client_socket, message):
         if dest_socket != main_socket and dest_socket != client_socket:
             try:
                 dest_socket.send(message)
-            except BrokenPipeError:
+            except ConnectionError:
                 continue
 
 
