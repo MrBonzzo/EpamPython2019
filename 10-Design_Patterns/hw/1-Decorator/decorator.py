@@ -9,6 +9,30 @@ class Component:
         raise NotImplementedError("Override get_cost method")
 
 
+class Whip(Component):
+    def __init__(self, coffee):
+        self.coffee = coffee
+
+    def get_cost(self):
+        return self.coffee.get_cost() + 7
+
+
+class Marshmallow(Component):
+    def __init__(self, coffee):
+        self.coffee = coffee
+
+    def get_cost(self):
+        return self.coffee.get_cost() + 10
+
+
+class Syrup(Component):
+    def __init__(self, coffee):
+        self.coffee = coffee
+
+    def get_cost(self):
+        return self.coffee.get_cost() + 11
+
+
 class BaseCoffe(Component):
     def get_cost(self):
         return 90
