@@ -84,7 +84,12 @@ class MyTubeChannel:
         self.notify(msg)
 
 
-class MyTubeUser:
+class User:
+    def update(self):
+        pass
+
+
+class MyTubeUser(User):
     def __init__(self, user_name):
         self._name = user_name
 
