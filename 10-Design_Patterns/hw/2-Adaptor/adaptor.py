@@ -120,10 +120,8 @@ class Adapter(DocumentsHandler):
         return super().upload_documents(new_docs)
 
 
-
 if __name__ == "__main__":
     class App: pass  # Упрощенная реализация сложного приложения
-
 
     app = App()
     app.documents_handler = DocumentsHandler(StoreService())
