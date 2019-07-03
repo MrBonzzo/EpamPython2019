@@ -11,17 +11,20 @@ if __name__ == "__main__":
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         server_socket.connect((host, port))
-    except ConnectionRefusedError:
+    except ConnectionError:
         print('\nUnable to connect')
         sys.exit()
     print('\nConnected to TCP chat server')
+    socket_list = [sys.stdin, server_socket]
     try:
         while True:
-            socket_list = [sys.stdin, server_socket]
             read_sockets, _, _ = select.select(socket_list, [], [])
             for sock in read_sockets:
                 if sock == server_socket:
-                    data = sock.recv(2048).decode('utf-8').rstrip()
+                    try:
+                        data = sock.recv(2048).decode('utf-8').rstrip()
+                    except OSError:
+                        continue
                     if not data:
                         server_socket.close()
                         print('\nDisconnected from chat server')
