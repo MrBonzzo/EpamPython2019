@@ -108,6 +108,19 @@ def client_code(documents_handler):
     print(documents_handler.get_documents(document_ids[1]))
 
 
+class Adapter(DocumentsHandler):
+    def __init__(self, instance):
+        self._service = instance._service
+
+    def upload_documents(self, documents):
+        prefix = f'{os.path.dirname(__file__)}/documents/'
+        new_docs = [f'{d[:-3]}json' for d in documents if d.endswith('xml')]
+        for new_doc, old_doc in zip(new_docs, documents):
+            os.rename(prefix + old_doc, prefix + new_doc)
+        return super().upload_documents(new_docs)
+
+
+
 if __name__ == "__main__":
     class App: pass  # Упрощенная реализация сложного приложения
 
@@ -115,5 +128,5 @@ if __name__ == "__main__":
     app = App()
     app.documents_handler = DocumentsHandler(StoreService())
     # Реализуйте класс Adapter и раскомментируйте строку ниже
-    # app.documents_handler = Adapter(app.documents_handler)
+    app.documents_handler = Adapter(app.documents_handler)
     client_code(app.documents_handler)
