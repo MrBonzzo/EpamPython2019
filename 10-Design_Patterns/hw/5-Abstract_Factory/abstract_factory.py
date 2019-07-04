@@ -12,95 +12,47 @@ import yaml
 
 
 class Menu:
+    def __init__(self, day):
+        self.day = day
+        with open('menu.yml', 'r', encoding='utf-8') as menu_file:
+            self.menu = yaml.safe_load(menu_file)[day]
+
     def get_first_course(self):
-        pass
+        return self.menu['first_courses']
 
     def get_second_course(self):
-        pass
+        return self.menu['second_courses']
 
     def get_drink(self):
-        pass
+        return self.menu['drinks']
 
     def get_lunch(self):
-        pass
+        lunch = {}
+        lunch['first_course'] = self.get_first_course()
+        lunch['second_course'] = self.get_second_course()
+        lunch['drink'] = self.get_drink()
+        return lunch
 
 
 class VeganMenu(Menu):
     def __init__(self, day):
-        self.day = day
-        with open('menu.yml', 'r', encoding='utf-8') as menu_file:
-            full_menu = yaml.safe_load(menu_file)
-            self.menu = {day: {course: full_menu[day][course]['vegan']
-                         for course in full_menu[day]}
-                         for day in full_menu}
-
-    def get_first_course(self):
-        return self.menu[self.day]['first_courses']
-
-    def get_second_course(self):
-        return self.menu[self.day]['second_courses']
-
-    def get_drink(self):
-        return self.menu[self.day]['drinks']
-
-    def get_lunch(self):
-        lunch = {}
-        lunch['first_course'] = self.get_first_course()
-        lunch['second_course'] = self.get_second_course()
-        lunch['drink'] = self.get_drink()
-        return lunch
+        super().__init__(day)
+        self.menu = {course: self.menu[course]['vegan']
+                     for course in self.menu}
 
 
 class ChildMenu(Menu):
     def __init__(self, day):
-        self.day = day
-        with open('menu.yml', 'r', encoding='utf-8') as menu_file:
-            full_menu = yaml.safe_load(menu_file)
-            self.menu = {day: {course: full_menu[day][course]['child']
-                         for course in full_menu[day]}
-                         for day in full_menu}
-
-    def get_first_course(self):
-        return self.menu[self.day]['first_courses']
-
-    def get_second_course(self):
-        return self.menu[self.day]['second_courses']
-
-    def get_drink(self):
-        return self.menu[self.day]['drinks']
-
-    def get_lunch(self):
-        lunch = {}
-        lunch['first_course'] = self.get_first_course()
-        lunch['second_course'] = self.get_second_course()
-        lunch['drink'] = self.get_drink()
-        return lunch
+        super().__init__(day)
+        self.menu = {course: self.menu[course]['child']
+                     for course in self.menu}
 
 
 class ChinaMenu(Menu):
     def __init__(self, day):
-        self.day = day
-        with open('menu.yml', 'r', encoding='utf-8') as menu_file:
-            full_menu = yaml.safe_load(menu_file)
-            self.menu = {day: {course: full_menu[day][course]['china']
-                         for course in full_menu[day]}
-                         for day in full_menu}
-
-    def get_first_course(self):
-        return self.menu[self.day]['first_courses']
-
-    def get_second_course(self):
-        return self.menu[self.day]['second_courses']
-
-    def get_drink(self):
-        return self.menu[self.day]['drinks']
-
-    def get_lunch(self):
-        lunch = {}
-        lunch['first_course'] = self.get_first_course()
-        lunch['second_course'] = self.get_second_course()
-        lunch['drink'] = self.get_drink()
-        return lunch
+        super().__init__(day)
+        self.menu = {course: self.menu[course]['china']
+                     for course in self.menu}
 
 
 if __name__ == '__main__':
